@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue&display=swap");
+
+html,
+body,
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+#root {
+  padding: 2rem;
+}
