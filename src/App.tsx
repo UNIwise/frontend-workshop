@@ -8,6 +8,7 @@ import SavedJokes from "./components/SavedJokes";
 import DeleteModal from "./components/DeleteModal";
 import JokeFilter from "./components/JokeFilter";
 import { useFilter } from "./hooks/useFilter";
+import { spliceArrayItem } from "./utility/spliceArrayItem";
 
 const App: FunctionComponent = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -35,9 +36,8 @@ const App: FunctionComponent = () => {
   };
 
   const saveJoke = () => {
-    if (!joke) return;
-
-    if (savedJokes.find((savedJoke) => savedJoke.id === joke.id)) return;
+    if (!joke || savedJokes.find((savedJoke) => savedJoke.id === joke.id))
+      return;
 
     setSavedJokes((prev) => [...prev, joke]);
     setFilter("");
@@ -50,10 +50,7 @@ const App: FunctionComponent = () => {
 
   const removeJoke = (id: string) => {
     setSavedJokes((prev) => {
-      const copy = [...prev];
-      const jokeIndex = copy.findIndex((joke) => joke.id === id);
-      copy.splice(jokeIndex, 1);
-      return copy;
+      return spliceArrayItem<DadJokeResponse>(prev, id);
     });
   };
 
