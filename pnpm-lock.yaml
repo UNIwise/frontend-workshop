@@ -16,6 +16,12 @@ dependencies:
   '@mantine/notifications':
     specifier: ^6.0.10
     version: 6.0.10(@mantine/core@6.0.10)(@mantine/hooks@6.0.10)(react-dom@18.2.0)(react@18.2.0)
+  '@types/lodash.defer':
+    specifier: ^4.1.7
+    version: 4.1.7
+  lodash.defer:
+    specifier: ^4.1.0
+    version: 4.1.0
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -33,6 +39,9 @@ devDependencies:
   '@testing-library/react':
     specifier: ^14.0.0
     version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
+  '@types/jest':
+    specifier: ^29.5.2
+    version: 29.5.2
   '@types/react':
     specifier: ^18.0.28
     version: 18.0.28
@@ -1049,6 +1058,16 @@ packages:
   /@types/json-schema@7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
+
+  /@types/lodash.defer@4.1.7:
+    resolution: {integrity: sha512-PfggyHhNfmwRdWHwAPXy+wJbNrEeQmdvYodYQ8q5xQea6oDsG69TrTqkYv9KtxTJUlILLcN4mICU+smloz21FQ==}
+    dependencies:
+      '@types/lodash': 4.14.195
+    dev: false
+
+  /@types/lodash@4.14.195:
+    resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==}
+    dev: false
 
   /@types/node@20.2.5:
     resolution: {integrity: sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==}
@@ -2555,6 +2574,10 @@ packages:
     dependencies:
       p-locate: 5.0.0
     dev: true
+
+  /lodash.defer@4.1.0:
+    resolution: {integrity: sha512-Cn8ZyNc6qu5pZyoF8ydQ6p2Jyr0rTK9AlghrsxeU/u1nrG38lJBOBSM+mj+OeEfm97G+aBDxXs3MxX6bULG56Q==}
+    dev: false
 
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
