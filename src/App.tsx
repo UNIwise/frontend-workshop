@@ -2,26 +2,32 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Container, Divider, Stack, Title } from "@mantine/core";
 import { FaTimesCircle } from "react-icons/fa";
 import JokeCard from "./components/JokeCard";
-import getDadJoke from "./api/jokes";
+import getDadJoke, { DadJokeResponse } from "./api/jokes";
 import JokeActions from "./components/JokeActions";
 import SavedJokes from "./components/SavedJokes";
 import DeleteModal from "./components/DeleteModal";
+import JokeFilter from "./components/JokeFilter";
+import { useFilter } from "./hooks/useFilter";
+import { spliceArrayItem } from "./utility/spliceArrayItem";
 
 const App: FunctionComponent = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<unknown>();
 
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [deleteJokeIndex, setDeleteJokeIndex] = useState<number | undefined>();
+  const [deleteJokeId, setDeleteJokeId] = useState<string | null>();
 
-  const [joke, setJoke] = useState<string>("");
-  const [savedJokes, setSavedJokes] = useState<string[]>([]);
+  const [joke, setJoke] = useState<DadJokeResponse | null>(null);
+  const [savedJokes, setSavedJokes] = useState<DadJokeResponse[]>([]);
+
+  const [filter, setFilter] = useState<string>("");
+  const { filterData, filteredData } = useFilter(savedJokes);
 
   const fetchJoke = async () => {
     try {
       setLoading(true);
-      const joke = await getDadJoke();
-      setJoke(joke);
+      const data = await getDadJoke();
+      setJoke(data);
     } catch (error) {
       setError(error);
     } finally {
@@ -30,25 +36,32 @@ const App: FunctionComponent = () => {
   };
 
   const saveJoke = () => {
+    if (!joke || savedJokes.find((savedJoke) => savedJoke.id === joke.id))
+      return;
+
     setSavedJokes((prev) => [...prev, joke]);
+    setFilter("");
   };
 
-  const promptJokeRemoval = (index: number) => {
-    setDeleteJokeIndex(index);
+  const promptJokeRemoval = (id: string) => {
+    setDeleteJokeId(id);
     setDeleteModalOpen(true);
   };
 
-  const removeJoke = (index: number) => {
+  const removeJoke = (id: string) => {
     setSavedJokes((prev) => {
-      const copy = [...prev];
-      copy.splice(index, 1);
-      return copy;
+      return spliceArrayItem<DadJokeResponse>(prev, id);
     });
   };
 
   useEffect(() => {
     fetchJoke();
   }, []);
+
+  const handleFilterChange = (value: string) => {
+    filterData(value);
+    setFilter(value);
+  };
 
   return (
     <Container size="sm">
@@ -74,19 +87,25 @@ const App: FunctionComponent = () => {
             Dad Jokes
           </Title>
 
-          <JokeCard text={joke} loading={loading} />
+          {joke && <JokeCard text={joke.joke} loading={loading} />}
 
-          <JokeActions onSave={saveJoke} onNext={fetchJoke} disabled={loading} />
+          <JokeActions
+            onSave={saveJoke}
+            onNext={fetchJoke}
+            disabled={loading}
+          />
 
           {savedJokes.length > 0 && (
             <>
               <Divider />
 
+              <JokeFilter value={filter} onChange={handleFilterChange} />
+
               <Title order={2} align="center">
                 Saved Jokes
               </Title>
 
-              <SavedJokes jokes={savedJokes} onRemove={promptJokeRemoval} />
+              <SavedJokes jokes={filteredData} onRemove={promptJokeRemoval} />
             </>
           )}
         </Stack>
@@ -95,12 +114,13 @@ const App: FunctionComponent = () => {
       <DeleteModal
         open={deleteModalOpen}
         onAnswer={(remove) => {
-          if (remove && deleteJokeIndex) {
-            removeJoke(deleteJokeIndex);
+          if (remove && deleteJokeId) {
+            removeJoke(deleteJokeId);
           }
 
+          setDeleteJokeId(null);
           setDeleteModalOpen(false);
-          setDeleteJokeIndex(undefined);
+          setFilter("");
         }}
       />
     </Container>

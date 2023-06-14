@@ -1,10 +1,11 @@
 import { Button, Card, Grid, Stack } from "@mantine/core";
 import { FunctionComponent } from "react";
 import { FaSkullCrossbones } from "react-icons/fa";
+import { DadJokeResponse } from "../api/jokes";
 
 interface SavedJokesProps {
-  jokes: string[];
-  onRemove: (index: number) => void;
+  jokes: DadJokeResponse[];
+  onRemove: (id: string) => void;
 }
 
 const SavedJokes: FunctionComponent<SavedJokesProps> = ({
@@ -13,30 +14,30 @@ const SavedJokes: FunctionComponent<SavedJokesProps> = ({
 }) => {
   return (
     <Stack spacing="md">
-      {jokes.map((joke, i) => (
-        <SavedJokesItem key={i} index={i} joke={joke} onRemove={onRemove} />
+      {jokes.map((joke) => (
+        <SavedJokesItem key={joke.id} data={joke} onRemove={onRemove} />
       ))}
     </Stack>
   );
 };
 
 interface SavedJokesItemProps {
-  index: number;
-  joke: string;
-  onRemove: (index: number) => void;
+  data: DadJokeResponse;
+  onRemove: (id: string) => void;
 }
 
 const SavedJokesItem: FunctionComponent<SavedJokesItemProps> = ({
-  index,
-  joke,
+  data,
   onRemove,
 }) => {
+  const { joke, id } = data;
+
   return (
     <Card padding="md">
       <Grid align="center" justify="space-between">
         <Grid.Col span={11}>{joke}</Grid.Col>
         <Grid.Col span={1}>
-          <Button variant="subtle" color="red" onClick={() => onRemove(index)}>
+          <Button variant="subtle" color="red" onClick={() => onRemove(id)}>
             <FaSkullCrossbones />
           </Button>
         </Grid.Col>
