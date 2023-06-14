@@ -30,5 +30,5 @@ describe('Radio component', () => {
     expect(radio1.checked).toBe(false)
     expect(radio2.checked).toBe(false)
     expect(radio3.checked).toBe(true)
-  })
+  });
 });
